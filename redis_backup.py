@@ -254,6 +254,7 @@ def main():
         aof_bak_path = copy_aof(aof, backup_dir, backup_filename, redis_port)
         if not aof_bak_path:
             os.remove(rdb_bak_path)
+            sys.stderr.write('remove %s\n' % (rdb_bak_path))
             sys.stderr.write('%s %s\n' % ('backup failed!', datetime.now()-st))
             sys.exit(1)
 

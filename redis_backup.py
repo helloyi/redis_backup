@@ -190,6 +190,8 @@ def main():
                         help='', default='redis_dump_%Y-%m-%d_%H%M%S')
     parser.add_argument('-redis_port', type=int, dest='redis_port',
                         help='redis port', default=6379)
+    parser.add_argument('-unix_socket_path', type=str, dest='unix_socket_path',
+                        help='redis socket path', default="")
     parser.add_argument('-max_backups', type=int, dest='max_backups',
                         help='maximum number of backups to keep', default=10)
     parser.add_argument('-bgsave_timeout', type=int, dest='bgsave_timeout',
@@ -210,6 +212,7 @@ def main():
     backup_filename = args.backup_filename
     max_backups = args.max_backups
     redis_port = args.redis_port
+    unix_socket_path = args.unix_socket_path
     bgsave_timeout = args.bgsave_timeout
     with_aof = args.with_aof
     aof_filename = args.aof_filename
@@ -218,12 +221,21 @@ def main():
     print 'backup dir:    \t', backup_dir
     print 'backup file:   \t', backup_filename
     print 'max backups:   \t', max_backups
-    print 'redis port:    \t', redis_port
+
+    if unix_socket_path == "":
+        print 'redis port:    \t', redis_port
+    else:
+        print 'unix socket path:    \t', unix_socket_path
+
     print 'bgsave timeout:\t', bgsave_timeout, 'seconds'
 
     # Connect to local redis server
-    r = redis.StrictRedis(port=args.redis_port)
-    print 'connected to redis server localhost:%d' % args.redis_port
+    if unix_socket_path != "":
+        r = redis.StrictRedis(unix_socket_path=unix_socket_path)
+        print 'connected to redis server ' % unix_socket_path
+    else:
+        r = redis.StrictRedis(port=args.redis_port)
+        print 'connected to redis server localhost:%d' % args.redis_port
 
     # Get where redis saves the RDB file
     rdb = rdb_path(r)

@@ -20,6 +20,7 @@ This python script `redis_backup.py` will create local Redis RDB-snapshot backup
       -backup_dir BACKUP_DIR           backup directory
       -backup_filename BACKUP_FILENAME backup filename format
       -redis_port REDIS_PORT           redis port
+      -unix_socket_path REDIS_SOCKET   redis socket
       -max_backups MAX_BACKUPS         maximum number of pair(rdb and rof) backups to keep
       -bgsave_timeout BGSAVE_TIMEOUT   bgsave timeout in seconds
       -with_aof                        enable backup aof
